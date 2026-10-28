@@ -18,3 +18,8 @@ y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 - Modelo Contact y relación User → contacts
 - Factories y seeder con datos de ejemplo
 - Diagrama entidad-relación en docs/er.md
+- Login con token de Sanctum (POST /api/v1/auth/login)
+- Cierre de sesión que revoca el token (POST /api/v1/auth/logout)
+- Respuesta 401 en JSON con la ruta del login para quien no ha iniciado sesión
+- Límite de 5 intentos de login por minuto
+- Esquema Bearer en la documentación

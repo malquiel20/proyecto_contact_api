@@ -81,9 +81,29 @@ La colección de Insomnia está en [docs/insomnia](docs/insomnia).
 
 ## Endpoints
 
-| Método | Ruta           | Descripción         | Auth |
-|--------|----------------|---------------------|------|
-| GET    | /api/v1/health | Estado del servicio | No   |
+| Método | Ruta                | Descripción                      | Auth   |
+|--------|---------------------|----------------------------------|--------|
+| GET    | /api/v1/health      | Estado del servicio              | No     |
+| POST   | /api/v1/auth/login  | Inicia sesión y entrega un token | No     |
+| POST   | /api/v1/auth/logout | Cierra sesión y revoca el token  | Bearer |
+
+## Autenticación
+
+1. POST /api/v1/auth/login con email, password y device_name.
+2. Guardar el token de la respuesta.
+3. Enviar en cada petición protegida:
+   `Authorization: Bearer {token}` y `Accept: application/json`
+
+Sin token (o con un token revocado) la API responde 401 con la ruta del login:
+
+```json
+{
+  "message": "Debes iniciar sesión para acceder a este recurso.",
+  "login_url": "http://127.0.0.1:8000/api/v1/auth/login"
+}
+```
+
+El login admite 5 intentos por minuto por correo e IP (luego responde 429).
 
 ## Flujo de trabajo
 
