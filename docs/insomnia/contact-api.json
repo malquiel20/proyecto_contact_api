@@ -1,0 +1,60 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-28T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v10",
+  "resources": [
+    {
+      "_id": "wrk_contact_api",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "Contact API",
+      "scope": "collection",
+      "description": ""
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_contact_api",
+      "name": "Base Environment",
+      "data": {
+        "token": ""
+      }
+    },
+    {
+      "_id": "env_local",
+      "_type": "environment",
+      "parentId": "env_base",
+      "name": "local",
+      "data": {
+        "base_url": "http://127.0.0.1:8000/api/v1",
+        "contact_id": 1
+      }
+    },
+    {
+      "_id": "fld_health",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Health",
+      "description": ""
+    },
+    {
+      "_id": "req_health",
+      "_type": "request",
+      "parentId": "fld_health",
+      "name": "Health",
+      "method": "GET",
+      "url": "{{ _.base_url }}/health",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {},
+      "metaSortKey": -999,
+      "description": ""
+    }
+  ]
+}
