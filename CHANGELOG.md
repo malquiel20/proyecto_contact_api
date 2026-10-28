@@ -25,3 +25,6 @@ y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 - Esquema Bearer en la documentación
 - Perfil de usuario: GET y PUT/PATCH /api/v1/profile
 - Correo y teléfono del usuario únicos; nombre y dirección se pueden repetir
+- CRUD de contactos: listar, agregar, ver perfil, actualizar y eliminar (soft delete)
+- Correo y teléfono de contacto únicos dentro de la agenda de cada usuario
+- Política: un usuario no puede ver, editar ni eliminar contactos de otro (403)
