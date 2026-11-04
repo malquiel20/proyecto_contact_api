@@ -1,0 +1,297 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-28T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v10",
+  "resources": [
+    {
+      "_id": "wrk_contact_api",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "Contact API",
+      "scope": "collection",
+      "description": ""
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_contact_api",
+      "name": "Base Environment",
+      "data": {
+        "token": ""
+      }
+    },
+    {
+      "_id": "env_local",
+      "_type": "environment",
+      "parentId": "env_base",
+      "name": "local",
+      "data": {
+        "base_url": "http://127.0.0.1:8000/api/v1",
+        "contact_id": 1
+      }
+    },
+    {
+      "_id": "fld_health",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Health",
+      "description": ""
+    },
+    {
+      "_id": "req_health",
+      "_type": "request",
+      "parentId": "fld_health",
+      "name": "Health",
+      "method": "GET",
+      "url": "{{ _.base_url }}/health",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {},
+      "metaSortKey": -999,
+      "description": ""
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Auth",
+      "description": ""
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/login",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"admin@contact.test\",\n  \"password\": \"password\",\n  \"device_name\": \"insomnia\"\n}"
+      },
+      "authentication": {},
+      "metaSortKey": -998,
+      "description": "",
+      "afterResponseScript": "const body = insomnia.response.json();\nif (body.token) {\n    insomnia.environment.set('token', body.token);\n}\n"
+    },
+    {
+      "_id": "req_logout",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/logout",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -997,
+      "description": ""
+    },
+    {
+      "_id": "fld_profile",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Perfil de usuario",
+      "description": ""
+    },
+    {
+      "_id": "req_profile_show",
+      "_type": "request",
+      "parentId": "fld_profile",
+      "name": "Ver perfil",
+      "method": "GET",
+      "url": "{{ _.base_url }}/profile",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -996,
+      "description": ""
+    },
+    {
+      "_id": "req_profile_update",
+      "_type": "request",
+      "parentId": "fld_profile",
+      "name": "Actualizar perfil",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/profile",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Administrador Contactos\",\n  \"email\": \"admin@contact.test\",\n  \"phone_number\": \"3001234567\",\n  \"residence\": \"Calle 10 # 20-30\",\n  \"url_avatar\": null\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -995,
+      "description": ""
+    },
+    {
+      "_id": "fld_contacts",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Contactos",
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_index",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Listar contactos",
+      "method": "GET",
+      "url": "{{ _.base_url }}/contacts",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -994,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_store",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Agregar contacto",
+      "method": "POST",
+      "url": "{{ _.base_url }}/contacts",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Ana Pérez\",\n  \"number_phone\": \"3109876543\",\n  \"email\": \"ana@correo.com\",\n  \"residence\": \"Carrera 5 # 12-40\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -993,
+      "description": "",
+      "afterResponseScript": "const body = insomnia.response.json();\nif (body.data && body.data.id) {\n    insomnia.environment.set('contact_id', body.data.id);\n}\n"
+    },
+    {
+      "_id": "req_contacts_show",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Perfil del contacto",
+      "method": "GET",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -992,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_update",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Actualizar contacto",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Ana María Pérez\",\n  \"number_phone\": \"3109876543\",\n  \"email\": \"ana@correo.com\",\n  \"residence\": \"Carrera 7 # 15-20\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -991,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_destroy",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Eliminar contacto",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -990,
+      "description": ""
+    }
+  ]
+}
