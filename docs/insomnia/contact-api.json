@@ -55,6 +55,60 @@
       "authentication": {},
       "metaSortKey": -999,
       "description": ""
+    },
+    {
+      "_id": "fld_auth",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Auth",
+      "description": ""
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/login",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"admin@contact.test\",\n  \"password\": \"password\",\n  \"device_name\": \"insomnia\"\n}"
+      },
+      "authentication": {},
+      "metaSortKey": -998,
+      "description": "",
+      "afterResponseScript": "const body = insomnia.response.json();\nif (body.token) {\n    insomnia.environment.set('token', body.token);\n}\n"
+    },
+    {
+      "_id": "req_logout",
+      "_type": "request",
+      "parentId": "fld_auth",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ _.base_url }}/auth/logout",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -997,
+      "description": ""
     }
   ]
 }
