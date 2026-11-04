@@ -45,6 +45,19 @@ CREATE DATABASE db_contact_api CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE DATABASE db_contact_api_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
+## Modelo de datos
+
+Diagrama entidad-relación: [docs/er.md](docs/er.md)
+
+## Datos de prueba
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Crea un administrador (admin@contact.test / password) con 10 contactos y
+3 usuarios más con 5 contactos cada uno. Solo para desarrollo local.
+
 ## Variables de entorno
 
 | Variable    | Ejemplo        | Descripción           |
