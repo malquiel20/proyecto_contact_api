@@ -86,6 +86,8 @@ La colección de Insomnia está en [docs/insomnia](docs/insomnia).
 | GET    | /api/v1/health      | Estado del servicio              | No     |
 | POST   | /api/v1/auth/login  | Inicia sesión y entrega un token | No     |
 | POST   | /api/v1/auth/logout | Cierra sesión y revoca el token  | Bearer |
+| GET    | /api/v1/profile     | Perfil del usuario autenticado   | Bearer |
+| PUT    | /api/v1/profile     | Actualiza el perfil (PATCH también) | Bearer |
 
 ## Autenticación
 

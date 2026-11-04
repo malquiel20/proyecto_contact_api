@@ -23,3 +23,5 @@ y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 - Respuesta 401 en JSON con la ruta del login para quien no ha iniciado sesión
 - Límite de 5 intentos de login por minuto
 - Esquema Bearer en la documentación
+- Perfil de usuario: GET y PUT/PATCH /api/v1/profile
+- Correo y teléfono del usuario únicos; nombre y dirección se pueden repetir

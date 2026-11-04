@@ -109,6 +109,62 @@
       },
       "metaSortKey": -997,
       "description": ""
+    },
+    {
+      "_id": "fld_profile",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Perfil de usuario",
+      "description": ""
+    },
+    {
+      "_id": "req_profile_show",
+      "_type": "request",
+      "parentId": "fld_profile",
+      "name": "Ver perfil",
+      "method": "GET",
+      "url": "{{ _.base_url }}/profile",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -996,
+      "description": ""
+    },
+    {
+      "_id": "req_profile_update",
+      "_type": "request",
+      "parentId": "fld_profile",
+      "name": "Actualizar perfil",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/profile",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Administrador Contactos\",\n  \"email\": \"admin@contact.test\",\n  \"phone_number\": \"3001234567\",\n  \"residence\": \"Calle 10 # 20-30\",\n  \"url_avatar\": null\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -995,
+      "description": ""
     }
   ]
 }
