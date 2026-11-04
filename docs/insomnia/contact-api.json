@@ -165,6 +165,133 @@
       },
       "metaSortKey": -995,
       "description": ""
+    },
+    {
+      "_id": "fld_contacts",
+      "_type": "request_group",
+      "parentId": "wrk_contact_api",
+      "name": "Contactos",
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_index",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Listar contactos",
+      "method": "GET",
+      "url": "{{ _.base_url }}/contacts",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -994,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_store",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Agregar contacto",
+      "method": "POST",
+      "url": "{{ _.base_url }}/contacts",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Ana Pérez\",\n  \"number_phone\": \"3109876543\",\n  \"email\": \"ana@correo.com\",\n  \"residence\": \"Carrera 5 # 12-40\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -993,
+      "description": "",
+      "afterResponseScript": "const body = insomnia.response.json();\nif (body.data && body.data.id) {\n    insomnia.environment.set('contact_id', body.data.id);\n}\n"
+    },
+    {
+      "_id": "req_contacts_show",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Perfil del contacto",
+      "method": "GET",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -992,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_update",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Actualizar contacto",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Ana María Pérez\",\n  \"number_phone\": \"3109876543\",\n  \"email\": \"ana@correo.com\",\n  \"residence\": \"Carrera 7 # 15-20\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -991,
+      "description": ""
+    },
+    {
+      "_id": "req_contacts_destroy",
+      "_type": "request",
+      "parentId": "fld_contacts",
+      "name": "Eliminar contacto",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/contacts/{{ _.contact_id }}",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}"
+      },
+      "metaSortKey": -990,
+      "description": ""
     }
   ]
 }

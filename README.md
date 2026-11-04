@@ -81,13 +81,30 @@ La colección de Insomnia está en [docs/insomnia](docs/insomnia).
 
 ## Endpoints
 
-| Método | Ruta                | Descripción                      | Auth   |
-|--------|---------------------|----------------------------------|--------|
-| GET    | /api/v1/health      | Estado del servicio              | No     |
-| POST   | /api/v1/auth/login  | Inicia sesión y entrega un token | No     |
-| POST   | /api/v1/auth/logout | Cierra sesión y revoca el token  | Bearer |
-| GET    | /api/v1/profile     | Perfil del usuario autenticado   | Bearer |
-| PUT    | /api/v1/profile     | Actualiza el perfil (PATCH también) | Bearer |
+| Método    | Ruta                    | Descripción                          | Auth   |
+|-----------|-------------------------|--------------------------------------|--------|
+| GET       | /api/v1/health          | Estado del servicio                  | No     |
+| POST      | /api/v1/auth/login      | Inicia sesión y entrega un token     | No     |
+| POST      | /api/v1/auth/logout     | Cierra sesión y revoca el token      | Bearer |
+| GET       | /api/v1/profile         | Perfil del usuario autenticado       | Bearer |
+| PUT/PATCH | /api/v1/profile         | Actualiza el perfil del usuario      | Bearer |
+| GET       | /api/v1/contacts        | Lista mis contactos (15 por página)  | Bearer |
+| POST      | /api/v1/contacts        | Agrega un contacto                   | Bearer |
+| GET       | /api/v1/contacts/{id}   | Perfil del contacto                  | Bearer |
+| PUT/PATCH | /api/v1/contacts/{id}   | Actualiza un contacto                | Bearer |
+| DELETE    | /api/v1/contacts/{id}   | Elimina un contacto (borrado lógico) | Bearer |
+
+## Reglas de la API
+
+| Situación                                         | Respuesta |
+|---------------------------------------------------|-----------|
+| Datos inválidos                                   | 422 con `errors` campo por campo |
+| Link que no existe (ruta o contacto)              | 404 `El recurso solicitado no existe.` |
+| Sin iniciar sesión                                | 401 con `login_url` |
+| Contacto que existe pero es de otro usuario       | 403 `No tienes permiso para acceder a este contacto.` |
+| Correo o teléfono de usuario ya en uso            | 422 (únicos en toda la tabla users) |
+| Correo o teléfono repetido en mis contactos       | 422 (únicos dentro de la agenda de cada usuario) |
+| Nombre y dirección                                | Se pueden repetir |
 
 ## Autenticación
 

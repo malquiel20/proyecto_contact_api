@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -31,6 +32,15 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => 'Debes iniciar sesión para acceder a este recurso.',
                     'login_url' => route('auth.login'),
                 ], 401);
+            }
+        });
+
+        // Un recurso de otro usuario (por ejemplo, un contacto ajeno) no deja pasar.
+        $exceptions->render(function (AccessDeniedHttpException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => $e->getMessage() ?: 'No tienes permiso para realizar esta acción.',
+                ], 403);
             }
         });
 

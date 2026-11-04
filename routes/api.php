@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ContactController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,5 +18,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
         Route::match(['put', 'patch'], '/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::apiResource('contacts', ContactController::class);
     });
 });
