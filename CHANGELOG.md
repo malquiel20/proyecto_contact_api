@@ -7,6 +7,8 @@ y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-04
+
 ### Added
 
 - GET /api/v1/health

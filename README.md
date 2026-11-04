@@ -7,7 +7,7 @@
 
 API REST para gestionar una agenda de contactos personal.
 
-- Versión actual: v0.1.0
+- Versión actual: v1.0.0
 
 ## Contenido
 
