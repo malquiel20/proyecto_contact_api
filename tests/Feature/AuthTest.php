@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-function loginData(array $cambios = []): array
+function datosLogin(array $cambios = []): array
 {
     return array_merge([
         'email' => 'ana@contact.test',
@@ -19,7 +19,7 @@ beforeEach(function () {
 });
 
 it('entrega un token con credenciales correctas', function () {
-    $this->postJson('/api/v1/auth/login', loginData())
+    $this->postJson('/api/v1/auth/login', datosLogin())
         ->assertOk()
         ->assertJsonStructure(['token', 'token_type', 'user' => ['id', 'name', 'email']])
         ->assertJsonPath('token_type', 'Bearer')
@@ -30,19 +30,19 @@ it('entrega un token con credenciales correctas', function () {
 });
 
 it('rechaza una contraseña incorrecta con 422', function () {
-    $this->postJson('/api/v1/auth/login', loginData(['password' => 'otra']))
+    $this->postJson('/api/v1/auth/login', datosLogin(['password' => 'otra']))
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['email']);
 });
 
 it('usa el mismo mensaje si el correo no existe', function () {
-    $this->postJson('/api/v1/auth/login', loginData(['email' => 'nadie@contact.test']))
+    $this->postJson('/api/v1/auth/login', datosLogin(['email' => 'nadie@contact.test']))
         ->assertUnprocessable()
         ->assertJsonPath('errors.email.0', 'Las credenciales no son correctas.');
 });
 
 it('valida los campos obligatorios', function (string $campo) {
-    $this->postJson('/api/v1/auth/login', loginData([$campo => '']))
+    $this->postJson('/api/v1/auth/login', datosLogin([$campo => '']))
         ->assertUnprocessable()
         ->assertJsonValidationErrors([$campo]);
 })->with(['email', 'password', 'device_name']);
@@ -50,7 +50,7 @@ it('valida los campos obligatorios', function (string $campo) {
 it('no deja entrar a un usuario eliminado', function () {
     $this->user->delete();
 
-    $this->postJson('/api/v1/auth/login', loginData())
+    $this->postJson('/api/v1/auth/login', datosLogin())
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['email']);
 });
@@ -80,10 +80,10 @@ it('responde 401 en JSON aunque falte la cabecera Accept', function () {
 
 it('limita los intentos de login a 5 por minuto', function () {
     foreach (range(1, 5) as $intento) {
-        $this->postJson('/api/v1/auth/login', loginData(['password' => 'otra']))
+        $this->postJson('/api/v1/auth/login', datosLogin(['password' => 'otra']))
             ->assertUnprocessable();
     }
 
-    $this->postJson('/api/v1/auth/login', loginData(['password' => 'otra']))
+    $this->postJson('/api/v1/auth/login', datosLogin(['password' => 'otra']))
         ->assertTooManyRequests();
 });
