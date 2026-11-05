@@ -4,7 +4,7 @@ use App\Models\Contact;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
-function contactData(array $cambios = []): array
+function datosContacto(array $cambios = []): array
 {
     return array_merge([
         'name' => 'Luis Gómez',
@@ -76,7 +76,7 @@ describe('agregar', function () {
     it('agrega un contacto a la agenda del usuario', function () {
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())
+        $this->postJson('/api/v1/contacts', datosContacto())
             ->assertCreated()
             ->assertJsonPath('data.name', 'Luis Gómez')
             ->assertJsonPath('data.email', 'luis@correo.com');
@@ -87,7 +87,7 @@ describe('agregar', function () {
     it('ignora un user_id enviado en la petición', function () {
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData(['user_id' => $this->otro->id]))
+        $this->postJson('/api/v1/contacts', datosContacto(['user_id' => $this->otro->id]))
             ->assertCreated();
 
         expect($this->user->contacts()->count())->toBe(1)
@@ -97,7 +97,7 @@ describe('agregar', function () {
     it('valida el nombre y los formatos', function (string $campo, mixed $valor) {
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData([$campo => $valor]))
+        $this->postJson('/api/v1/contacts', datosContacto([$campo => $valor]))
             ->assertUnprocessable()
             ->assertJsonValidationErrors([$campo]);
     })->with([
@@ -118,7 +118,7 @@ describe('agregar', function () {
         Contact::factory()->for($this->user)->create(['number_phone' => '3104445566']);
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())
+        $this->postJson('/api/v1/contacts', datosContacto())
             ->assertUnprocessable()
             ->assertJsonPath('errors.number_phone.0', 'Ya tienes un contacto con este teléfono.');
     });
@@ -127,7 +127,7 @@ describe('agregar', function () {
         Contact::factory()->for($this->user)->create(['email' => 'luis@correo.com']);
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())
+        $this->postJson('/api/v1/contacts', datosContacto())
             ->assertUnprocessable()
             ->assertJsonPath('errors.email.0', 'Ya tienes un contacto con este correo.');
     });
@@ -139,7 +139,7 @@ describe('agregar', function () {
         ]);
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())->assertCreated();
+        $this->postJson('/api/v1/contacts', datosContacto())->assertCreated();
     });
 
     it('permite el mismo teléfono y correo en la agenda de otro usuario', function () {
@@ -149,7 +149,7 @@ describe('agregar', function () {
         ]);
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())->assertCreated();
+        $this->postJson('/api/v1/contacts', datosContacto())->assertCreated();
     });
 
     it('permite reutilizar el teléfono y correo de un contacto eliminado', function () {
@@ -159,13 +159,13 @@ describe('agregar', function () {
         ])->delete();
         Sanctum::actingAs($this->user);
 
-        $this->postJson('/api/v1/contacts', contactData())->assertCreated();
+        $this->postJson('/api/v1/contacts', datosContacto())->assertCreated();
     });
 });
 
 describe('perfil del contacto', function () {
     it('muestra la información de un contacto propio', function () {
-        $contact = Contact::factory()->for($this->user)->create(contactData());
+        $contact = Contact::factory()->for($this->user)->create(datosContacto());
         Sanctum::actingAs($this->user);
 
         $this->getJson("/api/v1/contacts/{$contact->id}")
@@ -209,7 +209,7 @@ describe('actualizar', function () {
         $contact = Contact::factory()->for($this->user)->create();
         Sanctum::actingAs($this->user);
 
-        $this->putJson("/api/v1/contacts/{$contact->id}", contactData())
+        $this->putJson("/api/v1/contacts/{$contact->id}", datosContacto())
             ->assertOk()
             ->assertJsonPath('data.name', 'Luis Gómez');
 
@@ -229,19 +229,19 @@ describe('actualizar', function () {
     });
 
     it('permite conservar su propio teléfono y correo', function () {
-        $contact = Contact::factory()->for($this->user)->create(contactData());
+        $contact = Contact::factory()->for($this->user)->create(datosContacto());
         Sanctum::actingAs($this->user);
 
-        $this->putJson("/api/v1/contacts/{$contact->id}", contactData(['name' => 'Luis G.']))
+        $this->putJson("/api/v1/contacts/{$contact->id}", datosContacto(['name' => 'Luis G.']))
             ->assertOk();
     });
 
     it('no permite usar el teléfono o correo de otro contacto propio', function (string $campo) {
-        Contact::factory()->for($this->user)->create(contactData());
+        Contact::factory()->for($this->user)->create(datosContacto());
         $contact = Contact::factory()->for($this->user)->create();
         Sanctum::actingAs($this->user);
 
-        $this->patchJson("/api/v1/contacts/{$contact->id}", [$campo => contactData()[$campo]])
+        $this->patchJson("/api/v1/contacts/{$contact->id}", [$campo => datosContacto()[$campo]])
             ->assertUnprocessable()
             ->assertJsonValidationErrors([$campo]);
     })->with(['number_phone', 'email']);
@@ -250,7 +250,7 @@ describe('actualizar', function () {
         $ajeno = Contact::factory()->for($this->otro)->create(['name' => 'Original']);
         Sanctum::actingAs($this->user);
 
-        $this->putJson("/api/v1/contacts/{$ajeno->id}", contactData())
+        $this->putJson("/api/v1/contacts/{$ajeno->id}", datosContacto())
             ->assertForbidden();
 
         expect($ajeno->fresh()->name)->toBe('Original');
