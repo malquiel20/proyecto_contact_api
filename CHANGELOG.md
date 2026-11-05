@@ -7,6 +7,8 @@ y el proyecto usa [versionado semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-05
+
 ### Changed
 
 - Nombres de las pruebas de ejemplo y funciones de apoyo de las pruebas en español
