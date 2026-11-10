@@ -13,15 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->create([
+        $administrador = User::factory()->create([
             'name' => 'Administrador Contactos',
             'email' => 'admin@contact.test',
         ]);
 
-        Contact::factory(10)->for($admin)->create();
+        Contact::factory(10)->for($administrador)->create();
 
         User::factory(3)
-            ->has(Contact::factory(5))
+            ->has(Contact::factory(5), 'contactos')
             ->create();
     }
 }

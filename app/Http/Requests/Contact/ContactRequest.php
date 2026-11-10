@@ -15,9 +15,9 @@ class ContactRequest extends FormRequest
      */
     public function authorize(): bool|Response
     {
-        $contact = $this->route('contact');
+        $contacto = $this->route('contacto');
 
-        return $contact ? Gate::inspect('update', $contact) : true;
+        return $contacto ? Gate::inspect('actualizar', $contacto) : true;
     }
 
     /**
@@ -30,22 +30,22 @@ class ContactRequest extends FormRequest
      */
     public function rules(): array
     {
-        $creating = $this->isMethod('post');
-        $presence = $creating ? [] : ['sometimes'];
+        $creando = $this->isMethod('post');
+        $presencia = $creando ? [] : ['sometimes'];
 
         return [
-            'name' => [...$presence, 'required', 'string', 'max:255'],
+            'name' => [...$presencia, 'required', 'string', 'max:255'],
             'number_phone' => [
-                ...$presence,
-                ...($creating ? ['required_without:email'] : []),
+                ...$presencia,
+                ...($creando ? ['required_without:email'] : []),
                 'nullable', 'string', 'regex:/^\+?[0-9]{7,15}$/',
-                $this->uniqueForUser('number_phone'),
+                $this->unicoParaUsuario('number_phone'),
             ],
             'email' => [
-                ...$presence, 'nullable', 'email', 'max:255',
-                $this->uniqueForUser('email'),
+                ...$presencia, 'nullable', 'email', 'max:255',
+                $this->unicoParaUsuario('email'),
             ],
-            'residence' => [...$presence, 'nullable', 'string', 'max:255'],
+            'residence' => [...$presencia, 'nullable', 'string', 'max:255'],
         ];
     }
 
@@ -69,11 +69,11 @@ class ContactRequest extends FormRequest
     /**
      * Único entre los contactos activos del usuario, ignorando el que se edita.
      */
-    private function uniqueForUser(string $column): Unique
+    private function unicoParaUsuario(string $columna): Unique
     {
-        return Rule::unique('contacts', $column)
+        return Rule::unique('contacts', $columna)
             ->where('user_id', $this->user()->id)
             ->withoutTrashed()
-            ->ignore($this->route('contact'));
+            ->ignore($this->route('contacto'));
     }
 }

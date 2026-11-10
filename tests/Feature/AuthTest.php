@@ -12,7 +12,7 @@ function datosLogin(array $cambios = []): array
 }
 
 beforeEach(function () {
-    $this->user = User::factory()->create([
+    $this->usuario = User::factory()->create([
         'email' => 'ana@contact.test',
         'password' => 'secreta123',
     ]);
@@ -26,7 +26,7 @@ it('entrega un token con credenciales correctas', function () {
         ->assertJsonPath('user.email', 'ana@contact.test')
         ->assertJsonMissingPath('user.password');
 
-    expect($this->user->tokens()->count())->toBe(1);
+    expect($this->usuario->tokens()->count())->toBe(1);
 });
 
 it('rechaza una contraseña incorrecta con 422', function () {
@@ -48,7 +48,7 @@ it('valida los campos obligatorios', function (string $campo) {
 })->with(['email', 'password', 'device_name']);
 
 it('no deja entrar a un usuario eliminado', function () {
-    $this->user->delete();
+    $this->usuario->delete();
 
     $this->postJson('/api/v1/auth/login', datosLogin())
         ->assertUnprocessable()
@@ -56,13 +56,13 @@ it('no deja entrar a un usuario eliminado', function () {
 });
 
 it('cierra sesión y revoca el token', function () {
-    $token = $this->user->createToken('pruebas')->plainTextToken;
+    $token = $this->usuario->createToken('pruebas')->plainTextToken;
 
     $this->withToken($token)
         ->postJson('/api/v1/auth/logout')
         ->assertNoContent();
 
-    expect($this->user->tokens()->count())->toBe(0);
+    expect($this->usuario->tokens()->count())->toBe(0);
 });
 
 it('pide iniciar sesión para cerrar sesión', function () {

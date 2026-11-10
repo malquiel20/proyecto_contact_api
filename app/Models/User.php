@@ -36,7 +36,7 @@ class User extends Authenticatable
     /**
      * Contactos de la agenda del usuario.
      */
-    public function contacts(): HasMany
+    public function contactos(): HasMany
     {
         return $this->hasMany(Contact::class);
     }

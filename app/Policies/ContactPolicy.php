@@ -11,30 +11,30 @@ class ContactPolicy
     /**
      * Ver el perfil de un contacto: solo su dueño.
      */
-    public function view(User $user, Contact $contact): Response
+    public function ver(User $usuario, Contact $contacto): Response
     {
-        return $this->owns($user, $contact);
+        return $this->esDueno($usuario, $contacto);
     }
 
     /**
      * Actualizar un contacto: solo su dueño.
      */
-    public function update(User $user, Contact $contact): Response
+    public function actualizar(User $usuario, Contact $contacto): Response
     {
-        return $this->owns($user, $contact);
+        return $this->esDueno($usuario, $contacto);
     }
 
     /**
      * Eliminar un contacto: solo su dueño.
      */
-    public function delete(User $user, Contact $contact): Response
+    public function eliminar(User $usuario, Contact $contacto): Response
     {
-        return $this->owns($user, $contact);
+        return $this->esDueno($usuario, $contacto);
     }
 
-    private function owns(User $user, Contact $contact): Response
+    private function esDueno(User $usuario, Contact $contacto): Response
     {
-        return $user->id === $contact->user_id
+        return $usuario->id === $contacto->user_id
             ? Response::allow()
             : Response::deny('No tienes permiso para acceder a este contacto.');
     }

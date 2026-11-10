@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
-    $this->user = User::factory()->create([
+    $this->usuario = User::factory()->create([
         'name' => 'Ana Pérez',
         'email' => 'ana@contact.test',
         'phone_number' => '3001112233',
@@ -20,7 +20,7 @@ it('pide iniciar sesión para ver el perfil', function () {
 });
 
 it('muestra el perfil del usuario autenticado', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->getJson('/api/v1/profile')
         ->assertOk()
@@ -31,7 +31,7 @@ it('muestra el perfil del usuario autenticado', function () {
 });
 
 it('actualiza el perfil completo con PUT', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->putJson('/api/v1/profile', [
         'url_avatar' => 'https://example.com/ana.png',
@@ -44,14 +44,14 @@ it('actualiza el perfil completo con PUT', function () {
         ->assertJsonPath('data.name', 'Ana María Pérez')
         ->assertJsonPath('data.email', 'anamaria@contact.test');
 
-    expect($this->user->fresh())
+    expect($this->usuario->fresh())
         ->phone_number->toBe('3009998877')
         ->residence->toBe('Carrera 9 # 8-7')
         ->url_avatar->toBe('https://example.com/ana.png');
 });
 
 it('actualiza solo los campos enviados con PATCH', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', ['residence' => 'Nueva dirección 123'])
         ->assertOk()
@@ -60,7 +60,7 @@ it('actualiza solo los campos enviados con PATCH', function () {
 });
 
 it('permite conservar su propio correo y teléfono', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->putJson('/api/v1/profile', [
         'name' => 'Ana',
@@ -71,7 +71,7 @@ it('permite conservar su propio correo y teléfono', function () {
 
 it('no permite usar el correo de otro usuario', function () {
     User::factory()->create(['email' => 'luis@contact.test']);
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', ['email' => 'luis@contact.test'])
         ->assertUnprocessable()
@@ -80,7 +80,7 @@ it('no permite usar el correo de otro usuario', function () {
 
 it('no permite usar el teléfono de otro usuario', function () {
     User::factory()->create(['phone_number' => '3205556677']);
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', ['phone_number' => '3205556677'])
         ->assertUnprocessable()
@@ -89,14 +89,14 @@ it('no permite usar el teléfono de otro usuario', function () {
 
 it('permite repetir el nombre y la dirección de otro usuario', function () {
     User::factory()->create(['name' => 'Luis Gómez', 'residence' => 'Calle 50 # 10-10']);
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', ['name' => 'Luis Gómez', 'residence' => 'Calle 50 # 10-10'])
         ->assertOk();
 });
 
 it('valida el formato de los campos', function (string $campo, mixed $valor) {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', [$campo => $valor])
         ->assertUnprocessable()
@@ -109,18 +109,18 @@ it('valida el formato de los campos', function (string $campo, mixed $valor) {
 ]);
 
 it('cambia la contraseña con confirmación', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', [
         'password' => 'nueva-clave-123',
         'password_confirmation' => 'nueva-clave-123',
     ])->assertOk();
 
-    expect(Hash::check('nueva-clave-123', $this->user->fresh()->password))->toBeTrue();
+    expect(Hash::check('nueva-clave-123', $this->usuario->fresh()->password))->toBeTrue();
 });
 
 it('rechaza una contraseña sin confirmar', function () {
-    Sanctum::actingAs($this->user);
+    Sanctum::actingAs($this->usuario);
 
     $this->patchJson('/api/v1/profile', ['password' => 'nueva-clave-123'])
         ->assertUnprocessable()
