@@ -12,7 +12,7 @@ class ContactResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $solicitud): array
     {
         return [
             'id' => $this->id,

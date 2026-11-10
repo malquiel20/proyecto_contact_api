@@ -26,17 +26,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('login', function (Request $request) {
+        RateLimiter::for('login', function (Request $solicitud) {
             return Limit::perMinute(5)
-                ->by(Str::lower((string) $request->input('email')).'|'.$request->ip())
-                ->response(fn (Request $request, array $headers) => response()->json([
+                ->by(Str::lower((string) $solicitud->input('email')).'|'.$solicitud->ip())
+                ->response(fn (Request $solicitud, array $cabeceras) => response()->json([
                     'message' => 'Demasiados intentos de inicio de sesión. Espera un minuto.',
-                ], 429, $headers));
+                ], 429, $cabeceras));
         });
 
         Scramble::configure()
-            ->withDocumentTransformers(function (OpenApi $openApi) {
-                $openApi->secure(SecurityScheme::http('bearer'));
+            ->withDocumentTransformers(function (OpenApi $documento) {
+                $documento->secure(SecurityScheme::http('bearer'));
             });
     }
 }

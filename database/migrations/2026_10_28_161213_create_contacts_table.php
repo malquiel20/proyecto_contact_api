@@ -8,13 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('contacts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->string('number_phone')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('contacts', function (Blueprint $tabla) {
+            $tabla->id();
+            $tabla->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $tabla->string('name');
+            $tabla->string('number_phone')->nullable();
+            $tabla->softDeletes();
+            $tabla->timestamps();
         });
     }
 

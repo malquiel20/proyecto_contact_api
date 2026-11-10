@@ -21,18 +21,18 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = $this->user();
+        $usuario = $this->user();
 
         return [
             'url_avatar' => ['sometimes', 'nullable', 'url', 'max:255'],
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'phone_number' => [
                 'sometimes', 'nullable', 'string', 'regex:/^\+?[0-9]{7,15}$/',
-                Rule::unique('users', 'phone_number')->ignore($user),
+                Rule::unique('users', 'phone_number')->ignore($usuario),
             ],
             'email' => [
                 'sometimes', 'required', 'email', 'max:255',
-                Rule::unique('users', 'email')->ignore($user),
+                Rule::unique('users', 'email')->ignore($usuario),
             ],
             'residence' => ['sometimes', 'nullable', 'string', 'max:255'],
             'password' => ['sometimes', 'required', 'confirmed', Password::min(8)],
