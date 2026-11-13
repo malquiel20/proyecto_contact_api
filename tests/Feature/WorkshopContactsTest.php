@@ -10,22 +10,22 @@ test('crea un contacto valido', function () {
 
     $response = $this->postJson('/api/v1/contacts', [
         'name' => 'Jaider Gil',
-        'phone' => '3135327884',
+        'number_phone' => '3135327884',
     ]);
 
     $response->assertCreated()
         ->assertJsonPath('data.name', 'Jaider Gil')
-        ->assertJsonPath('data.phone', '3135327884');
+        ->assertJsonPath('data.number_phone', '3135327884');
 
     $this->assertDatabaseHas('contacts', [
         'name' => 'Jaider Gil',
-        'phone' => '3135327884',
+        'number_phone' => '3135327884',
         'user_id' => $user->id,
         'email' => null,
     ]);
 });
 
-test('devuelve 404 para un contacto ajeno', function () {
+test('devuelve 403 para un contacto ajeno', function () {
     $owner = User::factory()->create();
     $visitor = User::factory()->create();
     $contact = Contact::factory()->for($owner)->create([
@@ -34,5 +34,6 @@ test('devuelve 404 para un contacto ajeno', function () {
     Sanctum::actingAs($visitor);
 
     $this->getJson("/api/v1/contacts/{$contact->id}")
-        ->assertNotFound();
+        ->assertForbidden()
+        ->assertJsonPath('message', 'No tienes permiso para acceder a este contacto.');
 });

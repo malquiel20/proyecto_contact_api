@@ -5,7 +5,7 @@ it('responde el estado del servicio', function () {
         ->assertOk()
         ->assertJson([
             'status' => 'ok',
-            'app' => 'Contac_API',
+            'app' => 'Contact API',
         ]);
 });
 
