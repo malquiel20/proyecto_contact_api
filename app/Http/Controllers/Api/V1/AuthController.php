@@ -19,31 +19,31 @@ class AuthController extends Controller
      *
      * @unauthenticated
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function iniciarSesion(LoginRequest $solicitud): JsonResponse
     {
-        $user = User::where('email', $request->validated('email'))->first();
+        $usuario = User::where('email', $solicitud->validated('email'))->first();
 
-        if (! $user || ! Hash::check($request->validated('password'), $user->password)) {
+        if (! $usuario || ! Hash::check($solicitud->validated('password'), $usuario->password)) {
             throw ValidationException::withMessages([
                 'email' => 'Las credenciales no son correctas.',
             ]);
         }
 
-        $token = $user->createToken($request->validated('device_name'))->plainTextToken;
+        $token = $usuario->createToken($solicitud->validated('device_name'))->plainTextToken;
 
         return response()->json([
             'token' => $token,
             'token_type' => 'Bearer',
-            'user' => new UserResource($user),
+            'user' => new UserResource($usuario),
         ]);
     }
 
     /**
      * Cierra la sesión y revoca el token actual.
      */
-    public function logout(Request $request): Response
+    public function cerrarSesion(Request $solicitud): Response
     {
-        $request->user()->currentAccessToken()->delete();
+        $solicitud->user()->currentAccessToken()->delete();
 
         return response()->noContent();
     }

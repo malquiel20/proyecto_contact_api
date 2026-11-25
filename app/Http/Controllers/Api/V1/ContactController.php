@@ -16,24 +16,24 @@ class ContactController extends Controller
     /**
      * Lista los contactos del usuario autenticado.
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $solicitud): AnonymousResourceCollection
     {
-        $contacts = $request->user()
-            ->contacts()
+        $contactos = $solicitud->user()
+            ->contactos()
             ->orderBy('name')
             ->paginate(15);
 
-        return ContactResource::collection($contacts);
+        return ContactResource::collection($contactos);
     }
 
     /**
      * Agrega un contacto a la agenda del usuario autenticado.
      */
-    public function store(ContactRequest $request): JsonResponse
+    public function store(ContactRequest $solicitud): JsonResponse
     {
-        $contact = $request->user()->contacts()->create($request->validated());
+        $contacto = $solicitud->user()->contactos()->create($solicitud->validated());
 
-        return (new ContactResource($contact))
+        return (new ContactResource($contacto))
             ->response()
             ->setStatusCode(201);
     }
@@ -41,31 +41,31 @@ class ContactController extends Controller
     /**
      * Perfil del contacto.
      */
-    public function show(Contact $contact): ContactResource
+    public function show(Contact $contacto): ContactResource
     {
-        Gate::authorize('view', $contact);
+        Gate::authorize('ver', $contacto);
 
-        return new ContactResource($contact);
+        return new ContactResource($contacto);
     }
 
     /**
      * Actualiza un contacto.
      */
-    public function update(ContactRequest $request, Contact $contact): ContactResource
+    public function update(ContactRequest $solicitud, Contact $contacto): ContactResource
     {
-        $contact->update($request->validated());
+        $contacto->update($solicitud->validated());
 
-        return new ContactResource($contact);
+        return new ContactResource($contacto);
     }
 
     /**
      * Elimina un contacto (borrado lógico).
      */
-    public function destroy(Contact $contact): JsonResponse
+    public function destroy(Contact $contacto): JsonResponse
     {
-        Gate::authorize('delete', $contact);
+        Gate::authorize('eliminar', $contacto);
 
-        $contact->delete();
+        $contacto->delete();
 
         return response()->json([
             'message' => 'Contacto eliminado correctamente.',

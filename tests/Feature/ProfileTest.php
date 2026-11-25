@@ -4,8 +4,8 @@ use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 test('muestra el perfil del usuario sin contraseña', function () {
-    $user = User::factory()->create(['email' => 'ana@correo.com']);
-    Sanctum::actingAs($user);
+    $usuario = User::factory()->create(['email' => 'ana@correo.com']);
+    Sanctum::actingAs($usuario);
 
     $this->getJson('/api/v1/profile')
         ->assertOk()
@@ -14,8 +14,8 @@ test('muestra el perfil del usuario sin contraseña', function () {
 });
 
 test('actualiza el nombre y la dirección del perfil', function () {
-    $user = User::factory()->create();
-    Sanctum::actingAs($user);
+    $usuario = User::factory()->create();
+    Sanctum::actingAs($usuario);
 
     $this->patchJson('/api/v1/profile', [
         'name' => 'Ana María',
@@ -28,8 +28,8 @@ test('actualiza el nombre y la dirección del perfil', function () {
 
 test('no permite usar el correo de otro usuario', function () {
     User::factory()->create(['email' => 'luis@correo.com']);
-    $user = User::factory()->create();
-    Sanctum::actingAs($user);
+    $usuario = User::factory()->create();
+    Sanctum::actingAs($usuario);
 
     $this->patchJson('/api/v1/profile', ['email' => 'luis@correo.com'])
         ->assertUnprocessable()

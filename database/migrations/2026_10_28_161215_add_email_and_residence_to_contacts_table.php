@@ -8,16 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->string('email')->nullable()->after('number_phone');
-            $table->string('residence')->nullable()->after('email');
+        Schema::table('contacts', function (Blueprint $tabla) {
+            $tabla->string('email')->nullable()->after('number_phone');
+            $tabla->string('residence')->nullable()->after('email');
         });
     }
 
     public function down(): void
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->dropColumn(['email', 'residence']);
+        Schema::table('contacts', function (Blueprint $tabla) {
+            $tabla->dropColumn(['email', 'residence']);
         });
     }
 };

@@ -8,19 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('url_avatar')->nullable()->after('id');
-            $table->string('phone_number')->nullable()->unique()->after('name');
-            $table->string('residence')->nullable()->after('email');
-            $table->softDeletes()->after('residence');
+        Schema::table('users', function (Blueprint $tabla) {
+            $tabla->string('url_avatar')->nullable()->after('id');
+            $tabla->string('phone_number')->nullable()->unique()->after('name');
+            $tabla->string('residence')->nullable()->after('email');
+            $tabla->softDeletes()->after('residence');
         });
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropUnique(['phone_number']);
-            $table->dropColumn(['url_avatar', 'phone_number', 'residence', 'deleted_at']);
+        Schema::table('users', function (Blueprint $tabla) {
+            $tabla->dropUnique(['phone_number']);
+            $tabla->dropColumn(['url_avatar', 'phone_number', 'residence', 'deleted_at']);
         });
     }
 };

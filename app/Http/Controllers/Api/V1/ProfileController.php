@@ -12,20 +12,20 @@ class ProfileController extends Controller
     /**
      * Perfil del usuario autenticado.
      */
-    public function show(Request $request): UserResource
+    public function mostrar(Request $solicitud): UserResource
     {
-        return new UserResource($request->user());
+        return new UserResource($solicitud->user());
     }
 
     /**
      * Actualiza el perfil del usuario autenticado.
      */
-    public function update(UpdateProfileRequest $request): UserResource
+    public function actualizar(UpdateProfileRequest $solicitud): UserResource
     {
-        $user = $request->user();
+        $usuario = $solicitud->user();
 
-        $user->update($request->validated());
+        $usuario->update($solicitud->validated());
 
-        return new UserResource($user);
+        return new UserResource($usuario);
     }
 }
